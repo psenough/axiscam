@@ -27,6 +27,38 @@ Test
 Run mocha on the test directory. A dummy VAPIX API server is used to stub out the camera for testing
 the Axis integration.
 
+CreateClient Callback Example for Express response
+--------------------------------------------------
+
+```javascript
+var axis = require('axiscam');
+
+function get_axis_proxy(req, res) {
+	var	name = 'my camera',
+		user = 'root',
+		pass = 'root',
+		ip = '127.0.0.1',
+		resolution '640x480';
+	
+	res.set({
+		'Cache-Control': 'no-cache',
+		'Connection': 'close',
+//		'content-length': 64445,
+		'content-type': 'multipart/x-mixed-replace; boundary=myboundary',
+		'Pragma': 'no-cache'
+	});
+	
+	var axisCam = axis.createClient({
+		name: name,
+		url: 'http://'+user+':'+pass+'@'+ip,
+		imageSize: resolution
+	}, function(){
+		//console.log('video stream ready for business: ' + axisCam.videoStream());
+		axisCam.videoStream().pipe(res);
+	});
+}
+```
+
 API
 ---
 
